@@ -30,26 +30,24 @@ app.get("/api/timestamp", function (req, res) {
 
 app.get("/api/timestamp/:str_date", function (req, res) {
 
-    const { str_date } = req.params;
-    let date_param;
-    if(!str_date.includes('-')){
-      date_param = new Date(str_date * 1000);
-    }else{
-       date_param = new Date(str_date);
-    }
-    
-    if(date_param === null){
-      return res.json({
-       
-        error: "Invalid Date"
+      const { str_date } = req.params;
+      let date_param = new Date(str_date);
 
-      });
-    }else{
-      return res.json({
-        unix: date_param.getTime(),
-        utc: date_param.toUTCString()
-      });
-    }
+      if(date_param.toString() === 'Invalid Date'){
+        date_param = new Date(parseInt(str_date));
+      }
+
+      
+      if(date_param.toString() === 'Invalid Date'){
+        return res.json({ 
+          error: "Invalid Date"
+        });
+      }else{
+        return res.json({
+          unix: date_param.getTime(),
+          utc: date_param.toUTCString()
+        });
+      }
 });
 
 
